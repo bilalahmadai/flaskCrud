@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+
+    <!-- Latest compiled and minified CSS -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+
+    <!-- Latest compiled JavaScript -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> -->
+
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css')}}">
+    <title>Document</title>
+</head>
+
+<body>
+    {% block body %}
+    <div class="container">
+        <div class="well text-center">
+            <h1>Flask web</h1>
+        </div>
+    </div>
+    <div class="container text-center">
+        <div class="row">
+            <div class="col">
+                <h2>List <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+                        add
+                    </button>
+                </h2>
+            </div>
+        </div>
+
+        {%with messages = get_flashed_messages() %}
+        {%if messages%}
+        {%for msj in messages%}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{msj}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        {%endfor%}
+        {%endif%}
+        {%endwith%}
+
+
+        <table class="table table-striped">
+
+            <tr>
+                <th>id</th>
+                <th>Name</th>
+                <th>RollNumber</th>
+                <th></th>
+
+            </tr>
+            {%for row in students%}
+            <tr>
+                <td>{{row.0}}</td>
+                <td>{{row.1}}</td>
+                <td>{{row.2}}</td>
+                <td>
+                    <a href="/update/{{row.0}}" class="btn btn-warning btn-sm " data-bs-toggle="modal"
+                        data-bs-target="#myupdate{{row.0}}">update</a>
+
+                    <a href="/delete/{{row.0}}" class="btn  btn-danger btn-sm "
+                        onclick="return confirm('r u sure')">delete</a>
+
+                    <!-- <a class="btn btn-danger btn-sm " data-toggle="modal" data-target="#mydelete{{row.0}}">delete</a> -->
+                </td>
+            </tr>
+
+            <!-- update modal -->
+            <div class="modal fade " id="myupdate{{row.0}}" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body ">
+
+                            <form action="{{url_for('update')}}" method="POST">
+
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">ID</span>
+                                    <input type="text" class="form-control" aria-label="Sizing example input " name="id"
+                                        value="{{row.0}}" aria-describedby="inputGroup-sizing-default">
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">NAME</span>
+                                    <input type="text" class="form-control" aria-label="Sizing example input "
+                                        name="name" value="{{row.1}}" aria-describedby="inputGroup-sizing-default">
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">RollNumber</span>
+                                    <input type="text" class="form-control" aria-label="Sizing example input "
+                                        name="rollnumber" value="{{row.2}}"
+                                        aria-describedby="inputGroup-sizing-default">
+                                </div>
+
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <input type="submit" class="btn btn-primary">
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            {%endfor%}
+        </table>
+
+    </div>
+
+
+
+    <!-- addModal -->
+    <div class="modal fade  " id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body ">
+
+                    <form action="{{url_for('insert')}}" method="POST">
+
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Name</span>
+                            <input type="text" class="form-control" aria-label="Sizing example input " name="name"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-default">RollNumber</span>
+                            <input type="text" class="form-control" aria-label="Sizing example input " name="rollnumber"
+                                aria-describedby="inputGroup-sizing-default">
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <input type="submit" class="btn btn-primary">
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    {% endblock %}
+</body>
+
+<!-- <script type="text/javascript" src="{{url_for('static',filename='css/bootstrap.min.js')}}"></script> -->
+<script type="text/javascript" src="{{url_for('static',filename='bootstrap.bundle.min.js')}}"></script>
+
+</html>
